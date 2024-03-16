@@ -5,11 +5,15 @@
  * @param {number} n_of_iterations
  * @returns {number[]}
  */
-function lfsr_seq(cn_to_c0_list, sn_to_s0_list, n_of_iterations) {
+function lfsr_seq(cn_to_c0_list, sn_to_s0_list, n_of_iterations = 9) {
   let register = sn_to_s0_list;
   let seq = [];
 
-  console.log("\n");
+  console.log(`\nGenerate sequence for: `);
+
+  console.log(`cn ... c0: ${cn_to_c0_list.join(" ")}`);
+  console.log(`sn ... s0: ${sn_to_s0_list.join(" ")}`);
+  console.log("\nSequence generation algorithm: ");
 
   for (let i = 0; i < n_of_iterations; i++) {
     let rev_reg = [...register].reverse();
@@ -26,6 +30,8 @@ function lfsr_seq(cn_to_c0_list, sn_to_s0_list, n_of_iterations) {
 
     register = [new_bit].concat(register.slice(0, register.length - 1));
   }
+
+  console.log(`\nSequence generated: ${seq.join("")}`);
 
   return seq;
 }
@@ -46,7 +52,7 @@ function lfsr_encrypt(message, seq) {
     printData[3].push(bit1 ^ bit2);
   });
 
-  console.log("\n");
+  console.log(`\nEncrypt the message ${message}: `);
 
   printData.forEach((row) => {
     console.log(row.join(" "));
@@ -57,8 +63,17 @@ function str_to_bitlist(str) {
   return [...str].map((c) => parseInt(c));
 }
 
-let seq = lfsr_seq([1, 0, 1], [1, 0, 0], 9);
-lfsr_encrypt("1001", seq);
+function gen_seq_and_encrypt(
+  cn_to_c0_list,
+  sn_to_s0_list,
+  message,
+  n_of_iterations
+) {
+  n_of_iterations ??= message.length * 2 + 1;
 
-let seq2 = lfsr_seq([1, 0, 1], [0, 1, 1], 9);
-lfsr_encrypt("1001", seq2);
+  const seq = lfsr_seq(cn_to_c0_list, sn_to_s0_list, n_of_iterations);
+
+  lfsr_encrypt(message, seq);
+}
+gen_seq_and_encrypt([1, 0, 1], [1, 0, 0], "1001");
+gen_seq_and_encrypt([1, 0, 1], [0, 1, 1], "1001");
