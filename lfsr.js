@@ -21,12 +21,11 @@ function lfsr_seq(cn_to_c0_list, sn_to_s0_list, n_of_iterations = 9) {
     seq.push(rev_reg[0]);
     console.log(rev_reg.join(" ") + " | " + rev_reg[0]);
 
-    [bit1, bit2] = cn_to_c0_list
+    new_bit = cn_to_c0_list
       .map((bit, i) => [bit, i])
       .filter(([bit, _]) => bit)
-      .map(([_, i]) => register[i]);
-
-    new_bit = bit1 ^ bit2;
+      .map(([_, i]) => register[i])
+      .reduce((bit1, bit2) => bit1 ^ bit2);
 
     register = [new_bit].concat(register.slice(0, register.length - 1));
   }
