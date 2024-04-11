@@ -16,7 +16,7 @@ function modExp(a, b, n) {
   return Number(result);
 }
 
-function checkRSASignature(x, sigX, n, e) {
+function checkRSASignature({ x, sigX, n, e }) {
   console.log(`\nx = ${x}, sig(x) = ${sigX}, n = ${n}, e = ${e}`);
   const powMod = modExp(sigX, e, n);
 
@@ -27,6 +27,6 @@ function checkRSASignature(x, sigX, n, e) {
 
   return powMod === x;
 }
-console.log(checkRSASignature(123, 115, 221, 35));
-console.log(checkRSASignature(43, 49, 221, 35));
-console.log(checkRSASignature(87, 41, 221, 35));
+console.log(checkRSASignature({ x: 123, sigX: 115, n: 221, e: 35 }));
+console.log(checkRSASignature({ x: 43, sigX: 49, n: 221, e: 35 }));
+console.log(checkRSASignature({ x: 87, sigX: 41, n: 221, e: 35 }));
