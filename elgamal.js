@@ -72,7 +72,7 @@ function findRS({ g, p, sk, ek, m }) {
 
   return [r, s];
 }
-function verifyRS({ beta, r, s, p, g, m }) {
+function verifyRS({ beta, p, g, m, r, s }) {
   console.log();
 
   const $m = (num) => mod(num, p);
@@ -90,16 +90,26 @@ function verifyRS({ beta, r, s, p, g, m }) {
   const g = 29;
   const p = 101;
   const sk = 63;
-  const ek = 23;
-  const m = 19;
   console.log(`\n\nPR7 Task 1`);
   const beta = findBeta({ g, p, sk });
   console.log(`\n\nPR7 Task 2`);
-  const [r, s] = findRS({ g, p, sk, ek, m });
-  verifyRS({ beta, r, s, p, g, m });
+  const [r, s] = findRS({ g, p, sk, ek: 23, m: 19 });
+  verifyRS({ beta, r, s, p, g, m: 19 });
 
   console.log(`\n\nPR7 Task 3`);
-  verifyRS({ beta, r: 15, s: 64, p, g, m: 17 });
+  verifyRS({ beta, p, g, m: 17, r: 15, s: 64 });
+}
+
+{
+  const g = 23;
+  const p = 97;
+  const sk = 67;
+  const pk = 15;
+  const beta = pk;
+  const [r, s] = findRS({ g, p, sk, ek: 31, m: 17 });
+  verifyRS({ beta, r, s, p, g, m: 17 });
+
+  verifyRS({ beta, p, g, m: 22, r: 37, s: 33 });
 }
 
 // findRS({ g: 23, p: 97, sk: 67, ek: 31, m: 17 });
