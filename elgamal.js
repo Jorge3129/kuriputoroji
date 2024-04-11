@@ -35,7 +35,7 @@ function mod(number, divisor) {
   }
 }
 
-function findBeta(g, p, sk) {
+function findBeta({ g, p, sk }) {
   console.log();
   let d = sk;
   const beta = modExp(g, d, p);
@@ -47,7 +47,7 @@ function findBeta(g, p, sk) {
   return beta;
 }
 
-function findRS(g, p, sk, ek, m) {
+function findRS({ g, p, sk, ek, m }) {
   console.log();
   const d = sk;
   const r = modExp(g, ek, p);
@@ -58,6 +58,7 @@ function findRS(g, p, sk, ek, m) {
 
   const s = $m(($m(m) - $m(d) * $m(r)) * modInverse(ek, p - 1));
 
+  console.log();
   console.log(`s = (m - d * r) * (ek)^(-1) (mod p-1) = `);
 
   console.log(
@@ -71,6 +72,34 @@ function findRS(g, p, sk, ek, m) {
 
   return [r, s];
 }
+function verifyRS({ beta, r, s, p, g, m }) {
+  console.log();
 
-findBeta(29, 101, 63);
-findRS(29, 101, 63, 23, 19);
+  const $m = (num) => mod(num, p);
+
+  const t = $m(modExp(beta, r, p) * modExp(r, s, p));
+  const gm = modExp(g, m, p);
+
+  console.log(`t = β^r * r^s (mod p) = ${beta}^${r} * ${r}^${s} (mod ${p}) =`);
+  console.log(`= ${beta}^${r} * ${r}^${s} (mod ${p}) = ${t} (mod ${p})`);
+  console.log();
+  console.log(`g^m (mod p) = ${g}^${m} (mod ${p}) = ${gm} (mod ${p})`);
+}
+
+{
+  const g = 29;
+  const p = 101;
+  const sk = 63;
+  const ek = 23;
+  const m = 19;
+  console.log(`\n\nPR7 Task 1`);
+  const beta = findBeta({ g, p, sk });
+  console.log(`\n\nPR7 Task 2`);
+  const [r, s] = findRS({ g, p, sk, ek, m });
+  verifyRS({ beta, r, s, p, g, m });
+
+  console.log(`\n\nPR7 Task 3`);
+  verifyRS({ beta, r: 15, s: 64, p, g, m: 17 });
+}
+
+// findRS({ g: 23, p: 97, sk: 67, ek: 31, m: 17 });
